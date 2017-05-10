@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('slug');
             $table->integer('brand_id')->nullable()->unsigned();
             $table->string('made_in')->nullable();
+            $table->string('material')->nullable();
             $table->integer('regular_price');
             $table->integer('sale_price');
             $table->integer('discount'); // if (regular_price - sale_price) / regular_price => discount = 22

@@ -8,7 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 class Product extends Model
 {
     use Sluggable;
-    protected $fillable = ['name', 'sku', 'catalog_id', 'slug', 'brand_id', 'made_in', 'regular_price', 'sale_price', 'discount', 'counter', 'view', 'image_link', 'image_catalog', 'product_description'];
+    protected $fillable = ['name', 'sku', 'catalog_id', 'slug', 'brand_id', 'made_in', 'regular_price', 'sale_price', 'discount', 'counter', 'view', 'image_link', 'image_catalog', 'product_description', 'material'];
 
     /**
      * Return the sluggable configuration array for this model.
