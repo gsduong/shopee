@@ -11,7 +11,7 @@ class AdminTableSeeder extends Seeder
      */
     public function run()
     {
-        $admin = new \App\Admin(['username' => 'admin', 'password' => bcrypt('admin')]);
+        $admin = new \App\Admin(['username' => 'admin', 'password' => bcrypt('admin'), 'root' => 1]);
         $admin->save();
     }
 }
