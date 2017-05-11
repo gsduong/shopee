@@ -32,6 +32,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 * `composer install`
 * `php artisan migrate`
 * `php artisan seed`
+* `sudo chmod -R 777 *`
 * `php artisan serve --port=9000`
 3. Open <http://localhost:9000/>
 4. Admin account: username = 'admin', password = 'admin'
