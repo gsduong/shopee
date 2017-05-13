@@ -11,9 +11,13 @@ use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
+    public function index(){
+        return view('admin.dashboard');
+    }
+
     public function showFormLogin(){
         if (Session::has('admin')) {
-            return view('admin.dashboard');
+            return redirect('/admin/dashboard');
         }
         return view('admin.login');
     }
@@ -26,20 +30,20 @@ class AdminController extends Controller
         if (!is_null($admin)) {
             if (Hash::check($password, $admin->password)) {
                 Session::put('admin', $admin);
-                if (view()->exists('admin.dashboard')) return view('admin.dashboard', ['admin' => $admin]);
+                return redirect('/admin/dashboard');
             }
         }
+
         $errors = [
             'error' => 'Username or password is incorrect'
         ];
-
         return redirect('/admin/login')->with('errors', $errors);
     }
 
     public function logout(){
         if (!Session::has('admin')) return view('admin.login');
         Session::forget('admin');
-        return view('admin.login');
+        return redirect('/admin/login');
     }
 
 }

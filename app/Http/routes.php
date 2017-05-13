@@ -19,10 +19,19 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
-Route::group(['prefix' => 'admin'], function()
+Route::get('/admin/login', 'Admin\AdminController@showFormLogin');
+Route::post('/admin/login', 'Admin\AdminController@login');
+Route::get('/admin/logout', 'Admin\AdminController@logout');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'check_admin'], function()
 {
-    Route::get('dashboard', function() {} );
-    Route::get('login', 'Admin\AdminController@showFormLogin');
-    Route::post('login', 'Admin\AdminController@login');
-    Route::get('logout', 'Admin\AdminController@logout');
+    Route::get('dashboard', 'Admin\AdminController@index');
+
+    Route::get('dashboard/brands.html', 'Admin\BrandController@index');
+
+    Route::post('brand/update', 'Admin\BrandController@update');
+    Route::post('brand/create', 'Admin\BrandController@create');
+    Route::delete('brand/delete/{id}', 'Admin\BrandController@delete');
+
+
 });
