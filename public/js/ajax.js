@@ -17,6 +17,7 @@ $(".delete-brand").click(function(){
                 success: function ()
                 {
                     $('#brand-'+id).remove();
+                    alert("Brand successfully deleted!");
                     console.log("Brand deleted!");
                 }
             });
@@ -24,4 +25,11 @@ $(".delete-brand").click(function(){
         console.log("Brand not deleted!");
     }
 
+});
+
+$(".edit-brand").click(function(){
+    var id = $(this).data("id");
+    var name = $(this).data("name");
+    document.getElementById("name").value = name;
+    document.getElementById("id").value = id;
 });

@@ -27,7 +27,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_admin'], function()
 {
     Route::get('dashboard', 'Admin\AdminController@index');
 
-    Route::get('dashboard/brands.html', 'Admin\BrandController@index');
+    Route::get('dashboard/brand.html', 'Admin\BrandController@index');
 
     Route::post('brand/update', 'Admin\BrandController@update');
     Route::post('brand/create', 'Admin\BrandController@create');
