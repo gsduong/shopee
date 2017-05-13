@@ -337,7 +337,7 @@
             <ul class="sidebar-menu">
                 <li class="header">MAIN NAVIGATION</li>
                 <li class="active treeview">
-                    <a href="#">
+                    <a href="{{ url("admin/dashboard") }}">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                         {{--<span class="pull-right-container">--}}
                         {{--<i class="fa fa-angle-left pull-right"></i>--}}
@@ -406,14 +406,29 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-edit"></i> <span>Forms</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        <i class="fa fa-fw fa-book"></i>
+                        <span>Catalog</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-circle-o"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i> Advanced Elements</a>
+                        @foreach($root_catalogs as $catalog)
+                        <li>
+                            <a href="{{ url("/admin/dashboard/catalog/" . $catalog->id) . ".html"}}"><i class="fa fa-circle-o"></i> {{$catalog->name}}
+                                {{--<span class="pull-right-container">--}}
+                                    {{--<i class="fa fa-angle-left pull-right"></i>--}}
+                                {{--</span>--}}
+                            </a>
+                            {{--<ul class="treeview-menu">--}}
+                                {{--@if(count($catalog->children()->get()) > 0)--}}
+                                    {{--@foreach($catalog->children()->get() as $child)--}}
+                                        {{--<li><a href="#"><i class="fa fa-circle-o"></i>{{$child->name}}</a></li>--}}
+                                    {{--@endforeach--}}
+                                {{--@endif--}}
+                            {{--</ul>--}}
                         </li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>
+                        @endforeach
                     </ul>
                 </li>
 

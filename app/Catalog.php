@@ -34,4 +34,18 @@ class Catalog extends Model
      }
      else return 0; // Not found
    }
+
+   /**
+    * One might have children
+    */
+   public function children(){
+       return $this->hasMany('App\Catalog', 'parent_id');
+   }
+
+   /**
+    * One can have only one parent
+    */
+   public function parent(){
+       return $this->belongsTo('App\Catalog', 'parent_id');
+   }
 }

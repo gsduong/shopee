@@ -6,12 +6,12 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Brands
+                Catalog
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Admin</a></li>
                 <li class="active">Dashboard</li>
-                <li class="active">Brands</li>
+                <li class="active">Catalogs</li>
             </ol>
         </section>
 
@@ -19,24 +19,19 @@
         <section class="content">
             <div class="row">
                 @if (session()->has('error'))
-                <div class="alert alert-danger">
-                    {{ session()->get('error') }}
-                </div>
+                    <div class="alert alert-danger">
+                        {{ session()->get('error') }}
+                    </div>
                 @endif
 
 
                 @if (session()->has('success'))
-                <div class="alert alert-success"><span class="glyphicon glyphicon-ok"></span>
-                    <em>
-                        {{ session()->get('success') }}
-                    </em>
-                </div>
+                    <div class="alert alert-success"><span class="glyphicon glyphicon-ok"></span>
+                        <em>
+                            {{ session()->get('success') }}
+                        </em>
+                    </div>
                 @endif
-            </div>
-            <div class="row">
-                <div class="col-xs-5">
-                    {{ $brands->links() }}
-                </div>
             </div>
             <div class="row">
                 <div class="col-xs-12">
@@ -50,20 +45,19 @@
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
-                                    <th>Brand</th>
-                                    <th>Slug</th>
+                                    <th>Category</th>
+                                    <th>Subcategory</th>
                                     <th>Operations</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($brands as $brand)
-                                    <tr id="brand-{{$brand->id}}">
-                                        <td>{{ $brand->name }}</td>
-                                        <td>{{ $brand->slug }}</td>
+                                @foreach($catalog->children()->orderBy('name', 'asc')->get() as $subcategory)
+                                    <tr id="category-{{$subcategory->id}}">
+                                        <td>{{ $catalog->name }}</td>
+                                        <td>{{ $subcategory->name }}</td>
                                         <td>
-                                            {{--<button class="btn btn-info" value="{{$brand->id}}">Edit</button>--}}
-                                            <button class="edit-btn btn btn-warning" data-toggle="modal" data-target="#edit_modal" data-id="{{$brand->id}}" data-name="{{$brand->name}}">Edit</button>
-                                            <button class="delete-brand btn btn-danger" data-id="{{ $brand->id }}" data-token="{{ csrf_token() }}">Delete</button>
+                                            <button class="edit-btn btn btn-warning" data-toggle="modal" data-target="#edit_modal" data-id="{{$subcategory->id}}" data-name="{{$subcategory->name}}">Edit</button>
+                                            <button class="delete-subcategory btn btn-danger" data-id="{{ $subcategory->id }}" data-token="{{ csrf_token() }}">Delete</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -87,7 +81,7 @@
                             <h4 class="modal-title">Edit</h4>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ url('/admin/brand/update') }}" method="post">
+                            <form action="{{ url('/admin/catalog/update') }}" method="post">
                                 {{ csrf_field() }}
                                 <div class="form-group">
                                     <div class="form-group">
@@ -120,12 +114,13 @@
                             <h4 class="modal-title">Add</h4>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ url('/admin/brand/create') }}" method="post">
+                            <form action="{{ url('/admin/catalog/create') }}" method="post">
                                 {{ csrf_field() }}
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label for="name_to_add">Name:</label>
                                         <input type="text" class="form-control" id="name_to_add" name="name_to_add" required>
+                                        <input type="hidden" class="form-control" id="parent_id" name="parent_id" required value="{{$catalog->id}}">
                                     </div>
                                 </div>
 
@@ -145,5 +140,6 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+
 
 @endsection

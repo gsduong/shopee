@@ -33,5 +33,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_admin'], function()
     Route::post('brand/create', 'Admin\BrandController@create');
     Route::delete('brand/delete/{id}', 'Admin\BrandController@delete');
 
-
+    Route::get('dashboard/catalog/{id}.html', 'Admin\CatalogController@index');
+    Route::delete('catalog/delete/{id}', 'Admin\CatalogController@delete');
+    Route::post('catalog/create', 'Admin\CatalogController@create');
+    Route::post('catalog/update', 'Admin\CatalogController@update');
 });
