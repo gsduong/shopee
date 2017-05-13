@@ -18,3 +18,11 @@ Route::get('/', function () {
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+
+Route::group(['prefix' => 'admin'], function()
+{
+    Route::get('dashboard', function() {} );
+    Route::get('login', 'Admin\AdminController@showFormLogin');
+    Route::post('login', 'Admin\AdminController@login');
+    Route::get('logout', 'Admin\AdminController@logout');
+});
