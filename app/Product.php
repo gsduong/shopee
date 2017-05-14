@@ -36,4 +36,12 @@ class Product extends Model
     public function brand(){
         return $this->belongsTo('App\Brand');
     }
+
+    public function stock(){
+        return $this->hasMany('App\Stock', 'product_id');
+    }
+
+    public function qty(){
+        return $this->stock()->sum('stock');
+    }
 }

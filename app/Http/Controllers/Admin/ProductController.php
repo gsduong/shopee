@@ -74,6 +74,17 @@ class ProductController extends Controller
         $product->image_catalog = json_encode($images);
         $product->save();
 
+
+        /* Handle stock */
+        $size_ids = $request->sizes;
+        $color_ids = $request->colors;
+        $qty = $request->qty;
+
+        $n = count($size_ids);
+        for ($i = 0; $i < $n; $i++) {
+            if ($qty[$i]) \App\Stock::createOrUpdate($product->id, $size_ids[$i], $color_ids[$i], $qty[$i]);
+        }
+
         return redirect('/admin/dashboard/product.html');
     }
 

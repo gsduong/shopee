@@ -73,14 +73,14 @@
                                         <td>{{ $product->name }}</td>
                                         <td>{{ $product->catalog->name }}</td>
                                         <td>{{ $product->sku }}</td>
-                                        <td><img src="{{url($product->image_link)}}" alt="{{ $product->name }}" width="200" height="200"></td>
+                                        <td><img src="{{url($product->image_link)}}" alt="{{ $product->name }}" style="width: 80px; height: 80px;"></td>
                                         <td>{{ $product->brand->name }}</td>
                                         <td>{{ $product->made_in }}</td>
-                                        <td>{{ $product->regular_price }}</td>
-                                        <td>{{ $product->sale_price }}</td>
+                                        <td>{{ $product->regular_price }} VNĐ</td>
+                                        <td>{{ $product->sale_price }} VNĐ</td>
                                         <td>{{ $product->discount }}%</td>
                                         <td>{{ $product->material }}</td>
-                                        <td>{{ $product->qty }}</td>
+                                        <td>{{ $product->qty() }}</td>
                                         <td>
                                             {{--<button class="edit-btn btn btn-warning" data-toggle="modal" data-target="#edit_modal" data-id="{{$subcategory->id}}" data-name="{{$subcategory->name}}">Edit</button>--}}
                                             <a href="{{ url('admin/product/delete/' . $product->id) }}" class="btn btn-danger" role="button">Delete</a>
@@ -127,14 +127,14 @@
                                         <td>{{ $product->name }}</td>
                                         <td>{{ $product->catalog->name }}</td>
                                         <td>{{ $product->sku }}</td>
-                                        <td><img src="{{url($product->image_link)}}" alt="{{ $product->name }}" width="200" height="200"></td>
+                                        <td><img src="{{url($product->image_link)}}" alt="{{ $product->name }}" style="width: 80px; height: 80px;"></td>
                                         <td>{{ $product->brand->name }}</td>
                                         <td>{{ $product->made_in }}</td>
-                                        <td>{{ $product->regular_price }}</td>
-                                        <td>{{ $product->sale_price }}</td>
+                                        <td>{{ $product->regular_price }} VNĐ</td>
+                                        <td>{{ $product->sale_price }} VNĐ</td>
                                         <td>{{ $product->discount }}%</td>
                                         <td>{{ $product->material }}</td>
-                                        <td>{{ $product->qty }}</td>
+                                        <td>{{ $product->qty() }}</td>
                                         <td>
                                             {{--<button class="edit-btn btn btn-warning" data-toggle="modal" data-target="#edit_modal" data-id="{{$subcategory->id}}" data-name="{{$subcategory->name}}">Edit</button>--}}
                                             <a href="{{ url('admin/product/restore/' . $product->id) }}" class="btn btn-warning" role="button">Restore</a>
