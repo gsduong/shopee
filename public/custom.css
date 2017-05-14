@@ -1,0 +1,56 @@
+.dropzone {
+    border-style: dashed !important;
+}
+
+select option {
+    margin: 40px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+
+select option[value="1"] {
+    color: #fff;
+    background: rgba(0, 0, 0, 1) !important;
+}
+select option[value="2"] {
+    color: #fff;
+    background: rgba(0, 0, 255, 1) !important;
+}
+select option[value="3"] {
+    color: #fff;
+    background: rgba(165, 42, 42, 1) !important;
+}
+select option[value="4"] {
+    color: #fff;
+    background: rgba(128, 128, 128, 1) !important;
+}
+select option[value="5"] {
+    color: #fff;
+    background: rgba(0, 128, 0, 1) !important;
+}
+select option[value="6"] {
+    color: #fff;
+    background: rgba(255, 165, 0, 1) !important;
+}
+select option[value="7"] {
+    color: #fff;
+    background: rgba(255, 192, 203, 1) !important;
+}
+select option[value="8"] {
+    color: #fff;
+    background: rgba(128, 0, 128, 1) !important;
+}
+select option[value="9"] {
+    color: #fff;
+    background: rgba(255, 0, 0, 1) !important;
+}
+select option[value="10"] {
+    color: #fff;
+    background: rgba(255, 255, 255, 1) !important;
+}
+select option[value="11"] {
+    color: #fff;
+    background: rgba(255, 255, 0, 1) !important;
+}

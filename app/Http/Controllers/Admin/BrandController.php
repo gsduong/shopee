@@ -29,7 +29,7 @@ class BrandController extends Controller
 
     public function update(Request $request){
         $id = $request->id;
-        $name = $request->name;
+        $name = preg_replace('/\s\s+/', ' ', trim($request->name));
 
         $this->rules['name'] = $this->rules['name'] . $id;
 
@@ -47,7 +47,7 @@ class BrandController extends Controller
     }
 
     public function create(Request $request){
-        $name_to_add = $request->name_to_add;
+        $name_to_add = preg_replace('/\s\s+/', ' ', trim($request->name_to_add));
 
         if (\App\Brand::where('name', '=', $name_to_add)->exists()) {
             return redirect()->back()->with('error', 'Name already used!');

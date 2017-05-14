@@ -79,5 +79,8 @@ class BrandTableSeeder extends Seeder
 
         $brand = new \App\Brand(['name' => 'Thời trang Canifa']);
         $brand->save();
+
+        $brand = new \App\Brand(['name' => 'Thương hiệu thời trang tổng hợp']);
+        $brand->save();
     }
 }

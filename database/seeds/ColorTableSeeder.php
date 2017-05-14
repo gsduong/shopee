@@ -43,5 +43,8 @@ class ColorTableSeeder extends Seeder
 
         $color = new \App\Color(['color_name' => 'yellow', 'hexa_code' => '#FFFF00']);
         $color->save();
+
+        $color = new \App\Color(['color_name' => 'tổng hợp', 'hexa_code' => '#000000']);
+        $color->save();
     }
 }

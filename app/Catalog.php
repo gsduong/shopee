@@ -48,4 +48,11 @@ class Catalog extends Model
    public function parent(){
        return $this->belongsTo('App\Catalog', 'parent_id');
    }
+
+   /**
+    * One catalog has many products
+    */
+   public function products(){
+       return $this->hasMany('App\Product', 'catalog_id');
+   }
 }

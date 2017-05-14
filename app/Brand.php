@@ -23,4 +23,12 @@ class Brand extends Model
         ]
     ];
   }
+
+
+    /**
+     * One brand has many products
+     */
+    public function products(){
+        return $this->hasMany('App\Product', 'brand_id');
+    }
 }

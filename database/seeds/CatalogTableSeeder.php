@@ -75,6 +75,5 @@ class CatalogTableSeeder extends Seeder
 
         $catalog = new \App\Catalog(['name' => 'Cà vạt & nơ bướm', 'parent_id' => \App\Catalog::findIdByName('Thời trang nam')]);
         $catalog->save();
-
     }
 }

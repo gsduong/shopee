@@ -19,12 +19,16 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{ url("dist/css/skins/_all-skins.min.css") }}">
-
+    <link href="{{url('dropzone/dropzone.min.css')}}" rel="stylesheet">
+    <script src="{{url('dropzone/dropzone.min.js')}}"></script>
+    <link rel="stylesheet" href="{{url('custom.css')}}">
+    {{--<script src="{{url('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>--}}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
     <![endif]-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -63,7 +67,7 @@
                                     <li><!-- start message -->
                                         <a href="#">
                                             <div class="pull-left">
-                                                <img src="dist/img/user2-160x160.jpg" class="img-circle"
+                                                <img src="" class="img-circle"
                                                      alt="User Image">
                                             </div>
                                             <h4>
@@ -77,7 +81,7 @@
                                     <li>
                                         <a href="#">
                                             <div class="pull-left">
-                                                <img src="dist/img/user3-128x128.jpg" class="img-circle"
+                                                <img src="" class="img-circle"
                                                      alt="User Image">
                                             </div>
                                             <h4>
@@ -90,7 +94,7 @@
                                     <li>
                                         <a href="#">
                                             <div class="pull-left">
-                                                <img src="dist/img/user4-128x128.jpg" class="img-circle"
+                                                <img src="" class="img-circle"
                                                      alt="User Image">
                                             </div>
                                             <h4>
@@ -103,7 +107,7 @@
                                     <li>
                                         <a href="#">
                                             <div class="pull-left">
-                                                <img src="dist/img/user3-128x128.jpg" class="img-circle"
+                                                <img src="" class="img-circle"
                                                      alt="User Image">
                                             </div>
                                             <h4>
@@ -116,7 +120,7 @@
                                     <li>
                                         <a href="#">
                                             <div class="pull-left">
-                                                <img src="dist/img/user4-128x128.jpg" class="img-circle"
+                                                <img src="" class="img-circle"
                                                      alt="User Image">
                                             </div>
                                             <h4>
@@ -364,11 +368,11 @@
                 {{--</ul>--}}
                 {{--</li>--}}
                 <li>
-                    <a href="{{ url("pages/widgets.html") }}">
-                        <i class="fa fa-th"></i> <span>Widgets</span>
-                        <span class="pull-right-container">
-              <small class="label pull-right bg-green">new</small>
-            </span>
+                    <a href="{{ url("/admin/dashboard/product.html") }}">
+                        <i class="fa fa-th"></i> <span>Products</span>
+                        {{--<span class="pull-right-container">--}}
+              {{--<small class="label pull-right bg-green">new</small>--}}
+            {{--</span>--}}
                     </a>
                 </li>
                 {{--<li class="treeview">--}}
@@ -447,8 +451,8 @@
             </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> Simple tables</a></li>
-                        <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>
+                        <li><a href=""><i class="fa fa-circle-o"></i> Simple tables</a></li>
+                        <li><a href=""><i class="fa fa-circle-o"></i> Data tables</a></li>
                     </ul>
                 </li>
                 <li>
@@ -461,7 +465,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="pages/mailbox/mailbox.html">
+                    <a href="">
                         <i class="fa fa-envelope"></i> <span>Mailbox</span>
                         <span class="pull-right-container">
               <small class="label pull-right bg-yellow">12</small>
@@ -755,11 +759,42 @@
 <!-- SlimScroll 1.3.0 -->
 <script src="{{ url("plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- ChartJS 1.0.1 -->
-<script src="{{ url("plugins/chartjs/Chart.min.js") }}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ url("dist/js/pages/dashboard2.js") }}"></script>
+{{--<script src="{{ url("plugins/chartjs/Chart.min.js") }}"></script>--}}
+{{--<!-- AdminLTE dashboard demo (This is only for demo purposes) -->--}}
+{{--<script src="{{ url("dist/js/pages/dashboard2.js") }}"></script>--}}
 <!-- AdminLTE for demo purposes -->
 <script src="{{ url("dist/js/demo.js") }}"></script>
 <script src="{{ url("js/ajax.js") }}"></script>
+<!-- CK Editor -->
+
+<script src="https://cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+{{--<script src="{{url('adapters/jquery.js')}}"></script>--}}
+{{--<!-- Bootstrap WYSIHTML5 -->--}}
+{{--<script src="{{url('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>--}}
+<script>
+    $(function () {
+        // Replace the <textarea id="editor1"> with a CKEditor
+        // instance, using default configuration.
+        CKEDITOR.replace('product_description');
+        //bootstrap WYSIHTML5 - text editor
+//        $(".textarea").wysihtml5();
+    });
+</script>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+        $(".add-more").click(function(){
+            var html = $(".copy").html();
+            $(".after-add-more").after(html);
+        });
+
+        $("body").on("click",".remove",function(){
+            $(this).parents(".control-group").remove();
+        });
+
+    });
+
+</script>
 </body>
 </html>

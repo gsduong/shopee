@@ -27,7 +27,7 @@ class CatalogController extends Controller
     }
 
     public function create(Request $request){
-        $name = $request->name_to_add;
+        $name = preg_replace('/\s\s+/', ' ', trim($request->name_to_add));
         $parent_id = $request->parent_id;
 
         $category = \App\Catalog::where('name', '=', $name)->first();
@@ -43,7 +43,7 @@ class CatalogController extends Controller
 
     public function update(Request $request){
         $id = $request->id;
-        $name = $request->name;
+        $name = preg_replace('/\s\s+/', ' ', trim($request->name));
 
         $this->rules['name'] = $this->rules['name'] . $id;
 
