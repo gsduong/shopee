@@ -11,10 +11,23 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::resource('user', 'UserController');
+Route::resource('product', 'ProductController');
 
-Route::auth();
+Route::get('/', 'ProductController@homeDisplay');
+Route::get('/shop', 'ProductController@shopDisplay');
+Route::get('/product', 'ProductController@productDisplay');
+Route::get('/cart', 'HomeController@cart');
+Route::get('/checkout', 'HomeController@checkout');
+Route::get('/blog', 'HomeController@blog');
+Route::get('/single', 'HomeController@single');
 
-Route::get('/home', 'HomeController@index');
+Route::get('login', 'Auth\AuthController@getLogin');
+Route::post('authenticate', 'Auth\AuthController@postLogin');
+Route::get('logout', 'Auth\AuthController@logout');
+
+Route::post('/get_cart', 'ProductController@getCart');
+Route::post('/product_check', 'ProductController@productCheck');
+Route::post('/do_checkout', 'ProductController@doCheckOut');
+Route::post('/check_auth', 'Auth\AuthController@checkAuth');
+Route::post('/check_email', 'Auth\AuthController@checkEmail');
