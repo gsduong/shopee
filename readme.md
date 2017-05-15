@@ -28,7 +28,9 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## Installation Guide
 1. Clone repo
-2. In repo directory, run following commands:
+2. Create database named "db_shopee"
+3. Rename .env.example to .env. In .env file: DB_DATABASE=db_shopee;DB_USERNAME=<your_database_username>;DB_PASSWORD=<your_password>
+3. In repo directory, run following commands:
 * `composer install`
 * `php artisan migrate`
 * `php artisan seed`

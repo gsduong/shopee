@@ -15,6 +15,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('status'); // handled or not
+            $table->string('order_code')->unique();
             $table->integer('user_id')->nullable()->unsigned(); // in case guest can buy without logging in
             $table->string('buyer_name', 50);
             $table->string('buyer_email');
