@@ -332,6 +332,12 @@
                         <span class="glyphicon glyphicon-tags"></span> <span>Brands</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ url("/admin/dashboard/order.html") }}">
+
+                        <span class="glyphicon glyphicon-shopping-cart"></span> <span>Orders</span>
+                    </a>
+                </li>
                 <li class="header">LABELS</li>
                 <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
                 <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
