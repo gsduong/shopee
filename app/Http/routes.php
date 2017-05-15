@@ -48,7 +48,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_admin'], function()
     Route::get('product/delete/{id}', 'Admin\ProductController@delete');
     Route::get('product/create', 'Admin\ProductController@showFormCreate');
     Route::post('product/create', 'Admin\ProductController@create');
-    Route::get('product/edit/id', 'Admin\ProductController@showFormEdit');
+    Route::get('product/edit/{id}', 'Admin\ProductController@showFormEdit');
     Route::post('product/update', 'Admin\ProductController@update');
     Route::get('product/restore/{id}', 'Admin\ProductController@restore');
 });

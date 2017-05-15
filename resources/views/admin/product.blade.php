@@ -83,6 +83,7 @@
                                         <td>{{ $product->qty() }}</td>
                                         <td>
                                             {{--<button class="edit-btn btn btn-warning" data-toggle="modal" data-target="#edit_modal" data-id="{{$subcategory->id}}" data-name="{{$subcategory->name}}">Edit</button>--}}
+                                            <a href="{{ url('admin/product/edit/' . $product->id) }}" class="btn btn-warning" role="button">Edit</a>
                                             <a href="{{ url('admin/product/delete/' . $product->id) }}" class="btn btn-danger" role="button">Delete</a>
                                         </td>
                                     </tr>

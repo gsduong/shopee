@@ -13,8 +13,8 @@ class ProductController extends Controller
 {
     protected $rules = [
         'name' => 'required|unique:products,name',
-        'sku' => 'required|unique:products,sku',
-        'image' => 'required|mimes:jpeg,bmp,png',
+        'sku' => 'unique:products,sku',
+        'image' => 'mimes:jpeg,bmp,png',
         'sale_price' => 'required|min:1',
         'regular_price' => 'required|greater_than_field:sale_price',
     ];
@@ -35,7 +35,16 @@ class ProductController extends Controller
     }
 
     public function showFormEdit($id){
-        return view('admin.edit-product');
+        $product = \App\Product::findOrFail($id);
+        $colors = \App\Color::orderBy('color_name', 'asc')->get();
+        $categories = \App\Catalog::orderBy('name', 'asc')->get();
+        $brands = \App\Brand::orderBy('name', 'asc')->get();
+        $sizes = \App\Size::all();
+        $sizeArray = \App\Stock::getSizeArray($id);
+        $colorArray = \App\Stock::getColorArray($id);
+        $stockArray = \App\Stock::getStockArray($id);
+
+        return view('admin.edit-product', ['colors' => $colors, 'categories' => $categories, 'brands' => $brands, 'sizes' => $sizes, 'product' => $product, 'sizeArray' => $sizeArray, 'colorArray' => $colorArray, 'stockArray' => $stockArray]);
     }
 
     public function create(Request $request){
@@ -76,6 +85,7 @@ class ProductController extends Controller
 
 
         /* Handle stock */
+
         $size_ids = $request->sizes;
         $color_ids = $request->colors;
         $qty = $request->qty;
@@ -85,11 +95,75 @@ class ProductController extends Controller
             if ($qty[$i]) \App\Stock::createOrUpdate($product->id, $size_ids[$i], $color_ids[$i], $qty[$i]);
         }
 
-        return redirect('/admin/dashboard/product.html');
+        return redirect('/admin/product/edit/' . $product->id)->with('success', 'Successfully created!');
     }
 
     public function update(Request $request){
+        $this->rules['name'] = $this->rules['name'] . ',' . $request->id;
+        $this->rules['sku'] = $this->rules['sku'] . ',' . $request->id;
+        $this->validate($request, $this->rules);
 
+        $product = \App\Product::findOrFail($request->id);
+
+        $data = [
+            'name' => preg_replace('/\s\s+/', ' ', trim($request->name)),
+            'sku' => $request->sku,
+            'sale_price' => $request->sale_price,
+            'regular_price' => $request->regular_price,
+            'catalog_id' => $request->catalog_id,
+            'brand_id' => $request->brand_id,
+            'made_in' => $request->made_in,
+            'material' => $request->material,
+            'product_description' => $request->product_description,
+            'discount' => floor((( (float)( $request->regular_price - $request->sale_price ) / $request->regular_price) * 100))
+        ];
+
+
+        try {
+            $product->name = preg_replace('/\s\s+/', ' ', trim($request->name));
+            $product->sku = $request->sku;
+            $product->sale_price = $request->sale_price;
+            $product->regular_price = $request->regular_price;
+            $product->catalog_id = $request->catalog_id;
+            $product->brand_id = $request->brand_id;
+            $product->made_in = $request->made_in;
+            $product->material = $request->material;
+            $product->product_description = $request->product_description;
+            $product->discount = floor((( (float)( $request->regular_price - $request->sale_price ) / $request->regular_price) * 100));
+            $product->save();
+        } catch (QueryException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        /* Handle image request */
+        if ($request->file('image')){
+            $imageName = $product->id . '_' . time() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(base_path() . '/public/images/', $imageName);
+            $imageLink = url('/') . '/images/' . $imageName;
+
+            $images = array();
+            array_push($images, $imageLink);
+
+            $product->image_link = $imageLink;
+            $product->image_catalog = json_encode($images);
+            $product->save();
+        }
+
+        /* Delete old records */
+        \App\Stock::where('product_id', '=', $product->id)->delete();
+
+        /* Handle stock */
+
+        $size_ids = $request->sizes;
+        $color_ids = $request->colors;
+        $qty = $request->qty;
+
+        $n = count($size_ids);
+        for ($i = 0; $i < $n; $i++) {
+            if ($qty[$i]) \App\Stock::createOrUpdate($product->id, $size_ids[$i], $color_ids[$i], $qty[$i]);
+        }
+
+        return redirect()->back()->with('success', 'Successfully updated!');
     }
 
     public function delete($id){

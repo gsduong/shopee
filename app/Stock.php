@@ -22,4 +22,16 @@ class Stock extends Model
         }
         return $model;
     }
+
+    public static function getSizeArray($product_id){
+        return Stock::where('product_id', '=', $product_id)->pluck('size_id')->toArray();
+    }
+
+    public static function getColorArray($product_id){
+        return Stock::where('product_id', '=', $product_id)->pluck('color_id')->toArray();
+    }
+
+    public static function getStockArray($product_id){
+        return Stock::where('product_id', '=', $product_id)->pluck('stock')->toArray();
+    }
 }
