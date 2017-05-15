@@ -33,33 +33,7 @@
                     </div>
                 @endif
             </div>
-            <div class="row">
-                {{--<div class="col-md-5">--}}
-                    {{--<div class="row">--}}
-                        {{--<form method="GET" action="" accept-charset="UTF-8" id="products-form">--}}
-                            {{--<div class="col-md-2 col-xs-3">--}}
-                                {{--{!! Form::select('category_id', $categories, Input::get('category'), ['id' => 'category', 'class' => 'form-control', 'onchange' => 'this.form.submit()']) !!}--}}
-                            {{--</div>--}}
-                            {{--<div class="col-md-3 col-xs-4">--}}
-                                {{--<div class="input-group custom-search-form">--}}
-                                    {{--<input type="text" class="form-control" name="search" value="{{ Input::get('search') }}" placeholder="">--}}
-                                    {{--<span class="input-group-btn">--}}
-                                        {{--<button class="btn btn-default" type="submit" id="search-users-btn">--}}
-                                        {{--<span class="glyphicon glyphicon-search"></span>--}}
-                                        {{--</button>--}}
-                                        {{--@if (Input::has('search') && Input::get('search') != '')--}}
-                                            {{--<a href="{{ url('/admin/product.html') }}" class="btn btn-danger" type="button" >--}}
-                                                {{--<span class="glyphicon glyphicon-remove"></span>--}}
-                                            {{--</a>--}}
-                                        {{--@endif--}}
-                                    {{--</span>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</form>--}}
-                    {{--</div>--}}
 
-                {{--</div>--}}
-            </div>
             <div class="row tab-search">
                 <div class="col-md-6 col-xs-5">
                     {{--{{ $products->links() }}--}}
@@ -89,9 +63,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
-                        {{--<div class="box-header">--}}
-                            {{--<h3 class="box-title">Products</h3>--}}
-                        {{--</div>--}}
+
                         <!-- /.box-header -->
                         <div class="box-body">
                             <a href="{{ url('admin/product/create') }}" class="btn btn-info" role="button">Add new product</a>
@@ -106,12 +78,13 @@
                                     <th>SKU</th>
                                     <th>Image</th>
                                     <th>Brand</th>
-                                    <th>Made in</th>
+                                    {{--<th>Made in</th>--}}
                                     <th>Regular price</th>
                                     <th>Sale price</th>
                                     <th>Discount</th>
-                                    <th>Material</th>
+                                    {{--<th>Material</th>--}}
                                     <th>Qty</th>
+                                    <th>Time created</th>
                                     <th>Operations</th>
                                 </tr>
                                 </thead>
@@ -123,12 +96,13 @@
                                         <td>{{ $product->sku }}</td>
                                         <td><img src="{{url($product->image_link)}}" alt="{{ $product->name }}" style="width: 80px; height: 80px;"></td>
                                         <td>{{ $product->brand->name }}</td>
-                                        <td>{{ $product->made_in }}</td>
+                                        {{--<td>{{ $product->made_in }}</td>--}}
                                         <td>{{ $product->regular_price }} VNĐ</td>
                                         <td>{{ $product->sale_price }} VNĐ</td>
                                         <td>{{ $product->discount }}%</td>
-                                        <td>{{ $product->material }}</td>
+                                        {{--<td>{{ $product->material }}</td>--}}
                                         <td>{{ $product->qty() }}</td>
+                                        <td>{{$product->created_at}}</td>
                                         <td>
                                             {{--<button class="edit-btn btn btn-warning" data-toggle="modal" data-target="#edit_modal" data-id="{{$subcategory->id}}" data-name="{{$subcategory->name}}">Edit</button>--}}
                                             <a href="{{ url('admin/product/edit/' . $product->id) }}" class="btn btn-warning" role="button">Edit</a>

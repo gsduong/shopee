@@ -6,12 +6,13 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Catalog
+                {{$catalog->name}}
             </h1>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Admin</a></li>
+                <li><i class="fa fa-dashboard"></i> Admin</li>
                 <li class="active">Dashboard</li>
                 <li class="active">Catalogs</li>
+                <li class="active">{{$catalog->name}}</li>
             </ol>
         </section>
 

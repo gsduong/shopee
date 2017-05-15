@@ -13,7 +13,12 @@ use Illuminate\Support\Facades\Session;
 class AdminController extends Controller
 {
     public function index(){
-        return view('admin.dashboard');
+        $recent_products = \App\Product::orderBy('created_at', 'asc')->take(4)->get();
+        $user_count = \App\User::all()->count();
+        $product_count = \App\Product::all()->count();
+        $on_sale_products_count = \App\Product::where('discount', '>', '0')->count();
+        $order_count = \App\Order::all()->count();
+        return view('admin.dashboard', ['order_count' => $order_count, 'recent_products' => $recent_products, 'user_count' => $user_count, 'on_sale_products_count' => $on_sale_products_count, 'product_count' => $product_count]);
     }
 
     public function showFormLogin(){

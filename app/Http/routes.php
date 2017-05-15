@@ -53,6 +53,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'check_admin'], function()
     Route::get('product/edit/{id}', 'Admin\ProductController@showFormEdit');
     Route::post('product/update', 'Admin\ProductController@update');
     Route::get('product/restore/{id}', 'Admin\ProductController@restore');
+
+    Route::get('dashboard/order.html', 'Admin\OrderController@index');
+    Route::get('order/edit/{id}', 'Admin\OrderController@showFormEdit');
+    Route::post('order/edit', 'Admin\OrderController@update');
 });
 
 Route::get('login', 'Auth\AuthController@getLogin');
