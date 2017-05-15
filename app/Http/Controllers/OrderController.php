@@ -8,6 +8,8 @@ use App\Http\Requests;
 
 use App\Order;
 
+use DB;
+
 class OrderController extends Controller
 {
     
@@ -88,11 +90,12 @@ class OrderController extends Controller
 	public function doCheckOut(Request $request)
 	{
 		$order = new Order;
-		$order->status = true;
+		$order->status = 0;
 		if($request->user_id!=0)
 		{
 			$order->user_id = $request->user_id;
 		}
+		$order->order_code = $request->phone.time();
 		$order->buyer_name = $request->name;
 		$order->buyer_email = $request->mail;
 		$order->buyer_phone = $request->phone;
@@ -103,13 +106,13 @@ class OrderController extends Controller
 		$order->security = '';
 		$order->save();
 
-		foreach($request->products as $p)
+		$product=json_decode($request->products);
+		foreach($product as $p)
 		{
 			DB::table('order_product')->insert(
-			    array('order_id' => $order->id, 'product_id' => $p->product_id, 'size_id' => $p->size, 'color_id' => $p->color, 'total' => 0)
+			    array('order_id' => $order->id, 'product_id' => $p->product_id, 'size_id' => $p->size, 'color_id' => $p->color, 'qty' => $p->quantity, 'total' => $p->quantity*$p->price)
 			);
 		}
-
-		return "success";
+		return response()->json(['result' => 'success']);
 	}
 }

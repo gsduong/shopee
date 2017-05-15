@@ -61,4 +61,12 @@ class HomeController extends Controller
     {
         return view('users.single');
     }
+    public function thank()
+    {
+        return view('users.thank');
+    }
+    public function contact()
+    {
+        return view('users.contact');
+    }
 }

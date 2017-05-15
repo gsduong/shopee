@@ -15,7 +15,7 @@ class StockTableSeeder extends Seeder
             $stock = new \App\Stock(['product_id' => $i,
                 'size_id' => 4,
                 'color_id' => 4,
-                'stock' => 0
+                'stock' => 10
                 ]);
             $stock->save();
         }

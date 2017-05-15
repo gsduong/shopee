@@ -1,7 +1,11 @@
 @extends('users.blank')
 
 @section('reference')
-
+<style type="text/css">
+    .active_cate{
+        font-weight: 800;
+    }
+</style>
 @stop
 
 @section('content')
@@ -35,7 +39,7 @@
                                         <ul>
                                         @foreach($catalogs as $child)
                                             @if($child->parent_id==$catalog->id)
-                                                <li><a class="catalog-option" data-id="{{$catalog->id}}" href="javascript:void(0);">{{$child->name}} </a></li>
+                                                <li><a catalog-id="{{$child->id}}" class="catalog-option" href="javascript:void(0);">{{$child->name}} </a></li>
                                             @endif
                                         @endforeach
                                         </ul>
@@ -51,19 +55,19 @@
                             <div class="brands-name">
                                 <ul class="nav nav-pills nav-stacked">
                                 @foreach($brands as $brand)
-                                    <li><a data-id="{{$brand->id}}" class="brand-option" href="javascript:void(0);"> <span class="pull-right"></span>{{$brand->name}}</a></li>
+                                    <li><a brand-id="{{$brand->id}}" class="brand-option" href="javascript:void(0);"> <span class="pull-right"></span>{{$brand->name}}</a></li>
                                 @endforeach
                                 </ul>
                             </div>
                         </div><!--/brands_products-->
-                        
-                        <div class="price-range"><!--price-range-->
+                        <!--
+                        <div class="price-range">
                             <h2>Price Range</h2>
                             <div class="well">
                                  <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5" data-slider-value="[250,450]" id="sl2" ><br />
                                  <b>$ 0</b> <b class="pull-right">$ 600</b>
                             </div>
-                        </div><!--/price-range-->
+                        </div>-->
 
                         <div class="shipping text-center"><!--shipping-->
                             <img src="assets/users/images/home/shipping.jpg" alt="" />
@@ -81,7 +85,7 @@
                                 <div class="single-products">
                                         <div class="productinfo text-center">
                                             <img src="{{ $product->image_link }}" alt="" />
-                                            <h2>{{ $product->regular_price }}</h2>
+                                            <h2>{{ $product->sale_price }}</h2>
                                             <p>{{ $product->name }}</p>
                                             <input type="hidden" value="{{$product->id}}">
                                             <a href="{{url('/product?p='.$product->slug)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>More Details</a>
@@ -90,7 +94,7 @@
                                             <div class="overlay-content">
                                                 <a href="{{url('/product?p='.$product->slug)}}">
                                                     <img src="{{ $product->image_link }}" alt="" /></a>
-                                                <h2>{{ $product->regular_price }}</h2>
+                                                <h2>{{ $product->sale_price }}</h2>
                                                 <p>{{ $product->name }}</p>
                                                 <input type="hidden" value="{{$product->id}}">
                                                 <a href="{{url('/product?p='.$product->slug)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>More Details</a>
@@ -119,14 +123,28 @@
 
 @section('scripts')
 <script>
+    $( document ).ready(function() {
+        var url = window.location.href;
+        var catalog = getParameterByName('c', url);
+        var brand = getParameterByName('b', url);
+        if(catalog!=null){
+            var parent_id = $("a[catalog-id='" + catalog + "']").parent().parent().parent().parent().attr("id");
+            $("a[href='#" + parent_id + "']").click();
+            $("a[catalog-id='" + catalog + "']").addClass("active_cate");
+        }
+        if(brand!=null){
+            $("a[brand-id='" + brand + "']").addClass("active_cate");
+        }
+    });
+
     $(".brand-option").click(function(e){
-        var brand = $(this).attr('data-id');
+        var brand = $(this).attr('brand-id');
         var url = window.location.href;
         url = updateQueryStringParameter(url, "b", brand);
         window.location.href = url;
     });
     $(".catalog-option").click(function(e){
-        var catalog = $(this).attr('data-id');
+        var catalog = $(this).attr('catalog-id');
         var url = window.location.href;
         url = updateQueryStringParameter(url, "c", catalog);
         window.location.href = url;

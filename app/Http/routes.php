@@ -21,6 +21,8 @@ Route::get('/cart', 'HomeController@cart');
 Route::get('/checkout', 'HomeController@checkout');
 Route::get('/blog', 'HomeController@blog');
 Route::get('/single', 'HomeController@single');
+Route::get('/contact', 'HomeController@contact');
+Route::get('/thank', 'HomeController@thank');
 
 
 Route::get('/home', 'HomeController@index');
@@ -59,7 +61,7 @@ Route::get('logout', 'Auth\AuthController@logout');
 
 Route::post('/get_cart', 'ProductController@getCart');
 Route::post('/product_check', 'ProductController@productCheck');
-Route::get('/do_checkout', 'OrderController@doCheckOut');
+Route::post('/do_checkout', 'OrderController@doCheckOut');
 Route::post('/check_auth', 'Auth\AuthController@checkAuth');
 Route::post('/check_email', 'Auth\AuthController@checkEmail');
 
