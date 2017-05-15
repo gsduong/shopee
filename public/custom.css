@@ -50,3 +50,14 @@ select#colors option[value="11"] {
 .pagination {
     margin-top: 0 !important;
 }
+
+.shipping {
+    background-color: #00c0ef !important;
+}
+.pending {
+    background-color: #dd4b39 !important;
+}
+.delivered , .shipped {
+
+    background-color: #00a65a !important;
+}

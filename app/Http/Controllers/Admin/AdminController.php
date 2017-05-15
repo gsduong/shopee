@@ -18,7 +18,8 @@ class AdminController extends Controller
         $product_count = \App\Product::all()->count();
         $on_sale_products_count = \App\Product::where('discount', '>', '0')->count();
         $order_count = \App\Order::all()->count();
-        return view('admin.dashboard', ['order_count' => $order_count, 'recent_products' => $recent_products, 'user_count' => $user_count, 'on_sale_products_count' => $on_sale_products_count, 'product_count' => $product_count]);
+        $recent_orders = \App\Order::orderBy('id', 'asc')->take(7)->get();
+        return view('admin.dashboard', ['recent_orders' => $recent_orders, 'order_count' => $order_count, 'recent_products' => $recent_products, 'user_count' => $user_count, 'on_sale_products_count' => $on_sale_products_count, 'product_count' => $product_count]);
     }
 
     public function showFormLogin(){

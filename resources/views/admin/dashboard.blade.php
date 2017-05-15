@@ -102,83 +102,23 @@
                                 <table class="table no-margin">
                                     <thead>
                                     <tr>
-                                        <th>Order ID</th>
-                                        <th>Item</th>
+                                        <th>Buyer name</th>
+                                        <th>Buyer phone</th>
                                         <th>Status</th>
-                                        <th>Popularity</th>
+                                        <th>Option</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td><a href="{{ url("pages/examples/invoice.html") }}">OR9842</a></td>
-                                        <td>Call of Duty IV</td>
-                                        <td><span class="label label-success">Shipped</span></td>
-                                        <td>
-                                            <div class="sparkbar" data-color="#00a65a" data-height="20">
-                                                90,80,90,-70,61,-83,63
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="{{ url("pages/examples/invoice.html") }}">OR1848</a></td>
-                                        <td>Samsung Smart TV</td>
-                                        <td><span class="label label-warning">Pending</span></td>
-                                        <td>
-                                            <div class="sparkbar" data-color="#f39c12" data-height="20">
-                                                90,80,-90,70,61,-83,68
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="{{ url("pages/examples/invoice.html") }}">OR7429</a></td>
-                                        <td>iPhone 6 Plus</td>
-                                        <td><span class="label label-danger">Delivered</span></td>
-                                        <td>
-                                            <div class="sparkbar" data-color="#f56954" data-height="20">
-                                                90,-80,90,70,-61,83,63
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="{{ url("pages/examples/invoice.html") }}">OR7429</a></td>
-                                        <td>Samsung Smart TV</td>
-                                        <td><span class="label label-info">Processing</span></td>
-                                        <td>
-                                            <div class="sparkbar" data-color="#00c0ef" data-height="20">
-                                                90,80,-90,70,-61,83,63
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="{{ url("pages/examples/invoice.html") }}">OR1848</a></td>
-                                        <td>Samsung Smart TV</td>
-                                        <td><span class="label label-warning">Pending</span></td>
-                                        <td>
-                                            <div class="sparkbar" data-color="#f39c12" data-height="20">
-                                                90,80,-90,70,61,-83,68
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="{{ url("pages/examples/invoice.html") }}">OR7429</a></td>
-                                        <td>iPhone 6 Plus</td>
-                                        <td><span class="label label-danger">Delivered</span></td>
-                                        <td>
-                                            <div class="sparkbar" data-color="#f56954" data-height="20">
-                                                90,-80,90,70,-61,83,63
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="{{ url("pages/examples/invoice.html") }}">OR9842</a></td>
-                                        <td>Call of Duty IV</td>
-                                        <td><span class="label label-success">Shipped</span></td>
-                                        <td>
-                                            <div class="sparkbar" data-color="#00a65a" data-height="20">
-                                                90,80,90,-70,61,-83,63
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @foreach($recent_orders as $order)
+                                        <tr>
+                                            <td>{{$order->buyer_name}}</td>
+                                            <td>{{$order->buyer_phone}}</td>
+                                            <td><span class="label {{strtolower(\App\Order::statusTranslate($order->status))}}">{{\App\Order::statusTranslate($order->status)}}</span></td>
+                                            <td><a href="{{ url("admin/order/edit/" . $order->id) }}" class="label label-info">Edit</a></td>
+                                        </tr>
+                                    @endforeach
+
+
                                     </tbody>
                                 </table>
                             </div>

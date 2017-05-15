@@ -153,7 +153,7 @@
                                         </label>
                                         <input type="hidden" name="id" value="{{$order->id}}">
                                         <br>
-                                        <input type="submit" name="submit" value="Apply" class="btn btn-info">
+                                        <input type="submit" name="submit" value="Apply" class="btn label-info">
                                     </form>
                                 </div>
                             </div>

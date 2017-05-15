@@ -17,7 +17,11 @@ class AppServiceProvider extends ServiceProvider
     {
         $root_catalogs = \App\Catalog::whereNull('parent_id')->get();
 
-        view()->share('root_catalogs', $root_catalogs);
+        $pending = \App\Order::where('status', '=', 0)->count();
+        $shipping = \App\Order::where('status', '=', 1)->count();
+        $shipped = \App\Order::where('status', '=', 2)->count();
+
+        view()->share(['root_catalogs' => $root_catalogs, 'pending' => $pending, 'shipping' => $shipping, 'shipped' => $shipped]);
 
         Validator::extend('greater_than_field', function($attribute, $value, $parameters, $validator) {
             $min_field = $parameters[0];
