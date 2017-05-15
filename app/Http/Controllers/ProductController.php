@@ -200,26 +200,11 @@ class ProductController extends Controller
 		foreach($data as $d){
 			$product = Product::find((int)$d->product_id);
 			$d->product_id = $product;
+			$color = Color::find($d->color);
+			$d->color=$color;
+			$size = Size::find($d->size);
+			$d->size=$size;
 		}
 		return $data;
-	}
-
-	public function doCheckOut(Request $request)
-	{
-		$order = new Order;
-		$order->status = true;
-		$order->user_id = $request->user_id;
-		$order->buyer_name = $request->buyer_name;
-		$order->buyer_email = $request->buyer_email;
-		$order->buyer_phone = $request->buyer_phone;
-		$order->buyer_address = $request->buyer_address;
-		$order->buyer_message = $request->buyer_message;
-		$order->amount = $request->buyer_amount;
-		$order->payment_response_info = '';
-		$order->security = '';
-		$order->save();
-
-		return redirect()->back();
-		return $request;
 	}
 }

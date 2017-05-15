@@ -103,7 +103,7 @@
 							<li>Total <span class="final-price">0</span></li>
 						</ul>
 							<a class="btn btn-default update" href="">Update</a>
-							<a class="btn btn-default check_out" href="{{url('/checkout')}}">Check Out</a>
+							<a class="btn btn-default check_out" href="javascript:void(0);" onclick="gotoCheckOut();">Check Out</a>
 					</div>
 				</div>
 			</div>
@@ -137,44 +137,69 @@
 	            	}
 	            },
 	            success: function(items) {
-					var ItemHtml="";
-			    	for(var i=0; i< items.length; i++){
-						ItemHtml += "						<tr>";
-						ItemHtml += "							<td class=\"cart_product\">";
-						ItemHtml += "								<a href=\"\"><img src=\"" + items[i]["product_id"]["image_link"] + "\" alt=\"\"></a>";
-						ItemHtml += "							</td>";
-						ItemHtml += "							<td class=\"cart_description\">";
-						ItemHtml += "								<h4><a href=\"\">" + items[i]["product_id"]["name"] + "</a></h4>";
-						ItemHtml += "								<p>Web ID: " + items[i]["product_id"]["slug"] + "</p>";
-						ItemHtml += "							</td>";
-						ItemHtml += "							<td class=\"cart_price\">";
-						ItemHtml += "								<p>" + items[i]["product_id"]["regular_price"] + "</p>";
-						ItemHtml += "							</td>";
-						ItemHtml += "							<td class=\"cart_quantity\">";
-						ItemHtml += "								<div class=\"cart_quantity_button\">";
-						ItemHtml += "									<input class=\"cart_quantity_input\" type=\"text\" data-id=\"" + items[i]["product_id"]["id"] + "\" name=\"quantity\" value=\"" + items[i]["quantity"] + "\" size=\"2\">";
-						ItemHtml += "								</div>";
-						ItemHtml += "							</td>";
-						ItemHtml += "							<td class=\"cart_total\">";
-						ItemHtml += "								<p class=\"cart_total_price\">" + items[i]["product_id"]["regular_price"]*items[i]["quantity"] + "</p>";
-						ItemHtml += "							</td>";
-						ItemHtml += "							<td class=\"cart_delete\">";
-						ItemHtml += "								<a class=\"cart_quantity_delete\" href=\"javascript:void(0);\" data-id=\"" + items[i]["product_id"]["id"] + "\" onclick=\"deleteProduct(this)\"><i class=\"fa fa-times\"></i></a>";
-						ItemHtml += "							</td>";
-						ItemHtml += "						</tr>";
+	            	if(items.length==0){
+	            		$("#cart_item").html("<br><p style=\"margin-left:20px;\" >Your Cart is Empty</p>");
+	            	}
+	            	else{
+		            	var ItemHtml="";
+				    	for(var i=0; i< items.length; i++){
+							ItemHtml += "						<tr>";
+							ItemHtml += "							<td class=\"cart_product\">";
+							ItemHtml += "								<a href=\"\"><img src=\"" + items[i]["product_id"]["image_link"] + "\" alt=\"\"></a>";
+							ItemHtml += "							</td>";
+							ItemHtml += "							<td class=\"cart_description\">";
+							ItemHtml += "								<h4><a href=\"\">" + items[i]["product_id"]["name"] + "</a></h4>";
+							ItemHtml += "								<p>Web ID: " + items[i]["product_id"]["slug"] + "</p>";
+							ItemHtml += "								<p>Size: " + items[i]["size"]["size"] + ", Color: " + items[i]["color"]["color_name"] + "</p>";
+							ItemHtml += "							</td>";
+							ItemHtml += "							<td class=\"cart_price\">";
+							ItemHtml += "								<p>" + items[i]["product_id"]["regular_price"] + "</p>";
+							ItemHtml += "							</td>";
+							ItemHtml += "							<td class=\"cart_quantity\">";
+							ItemHtml += "								<div class=\"cart_quantity_button\">";
+							ItemHtml += "									<input class=\"cart_quantity_input\" type=\"text\" data-size=\"" + items[i]["size"]["id"] + "\" data-color=\"" + items[i]["color"]["id"] + "\" data-id=\"" + items[i]["product_id"]["id"] + "\" name=\"quantity\" value=\"" + items[i]["quantity"] + "\" size=\"2\">";
+							ItemHtml += "								</div>";
+							ItemHtml += "							</td>";
+							ItemHtml += "							<td class=\"cart_total\">";
+							ItemHtml += "								<p class=\"cart_total_price\">" + items[i]["product_id"]["regular_price"]*items[i]["quantity"] + "</p>";
+							ItemHtml += "							</td>";
+							ItemHtml += "							<td class=\"cart_delete\">";
+							ItemHtml += "								<a class=\"cart_quantity_delete\" href=\"javascript:void(0);\" data-size=\"" + items[i]["size"]["id"] + "\" data-color=\"" + items[i]["color"]["id"] + "\" data-id=\"" + items[i]["product_id"]["id"] + "\" onclick=\"deleteProduct(this)\"><i class=\"fa fa-times\"></i></a>";
+							ItemHtml += "							</td>";
+							ItemHtml += "						</tr>";
 
-			    	}
-			    	$("#cart_item").html(ItemHtml);
-			    	sumPrice();
+				    	}
+				    	$("#cart_item").html(ItemHtml);
+				    	sumPrice();
+	            	}
+
 			    	$('.cart_quantity_input').spinner({ min: 1 });
-			    	$('.ui-spinner-button').click(function() {
+			    	$('.ui-spinner-up').click(function() {
 					   var qty = $(this).siblings('input').val();
 					   var price = $(this).parent().parent().parent().prev().text();
 					   var id = $(this).siblings('input').attr("data-id");
+					   var color = $(this).siblings('input').attr("data-color");
+					   var size = $(this).siblings('input').attr("data-size");
 						myCart = JSON.parse(localStorage['myCart']);
-						var index = checkExist(myCart, id);
+						var index = checkExist(myCart, id, color, size);
 		                var qty = parseInt(myCart[index].quantity);
 		                qty += 1;
+		                myCart[index].quantity = qty;
+		                localStorage['myCart'] = JSON.stringify(myCart);
+					   $(this).parent().parent().parent().next().first().html('<p class="cart_total_price">' + qty*price + '</p>');
+					   sumPrice();
+					});
+					$('.ui-spinner-down').click(function() {
+					   var qty = $(this).siblings('input').val();
+					   var price = $(this).parent().parent().parent().prev().text();
+					   var id = $(this).siblings('input').attr("data-id");
+					   var color = $(this).siblings('input').attr("data-color");
+					   var size = $(this).siblings('input').attr("data-size");
+						myCart = JSON.parse(localStorage['myCart']);
+						var index = checkExist(myCart, id, color, size);
+						console.log(size);
+		                var qty = parseInt(myCart[index].quantity);
+		                qty -= 1;
 		                myCart[index].quantity = qty;
 		                localStorage['myCart'] = JSON.stringify(myCart);
 					   $(this).parent().parent().parent().next().first().html('<p class="cart_total_price">' + qty*price + '</p>');
@@ -194,25 +219,38 @@
 		$(".final-price").text(sum);
 	}
 
-	function checkExist(vendors, value) {
-        var found = -1;
-        for (var i = 0; i < vendors.length; i++) {
-            if (vendors[i].product_id == value) {
-                found = i;
-                break;
-            }
-        }
-        return found;
-    }
+	function checkExist(vendors, value, color, size) {
+	    var found = -1;
+	    for (var i = 0; i < vendors.length; i++) {
+	        if (vendors[i].product_id == value && vendors[i].color == color && vendors[i].size == size) {
+	            found = i;
+	            break;
+	        }
+	    }
+	    return found;
+	}
 
     function deleteProduct(e){
     	var id = $(e).attr("data-id");
+    	var size = $(e).attr("data-size");
+    	var color = $(e).attr("data-color");
     	myCart = JSON.parse(localStorage['myCart']);
-		var index = checkExist(myCart, id);
+		var index = checkExist(myCart, id, color, size);
 		myCart.splice(index, 1);
 		localStorage['myCart'] = JSON.stringify(myCart);
 		$(e).parent().parent().remove();
 		sumPrice();
+		if($("#cart_item").html()=="") $("#cart_item").html("<br><p style=\"margin-left:20px;\" >Your Cart is Empty</p>");
+    }
+
+    function gotoCheckOut(){
+    	if(localStorage['myCart'] == null || JSON.parse(localStorage['myCart']).length==0) {
+    		$("#error-message").html("No Product to Checkout");
+  			$("#errorModal").modal('show');
+    	}
+    	else{
+    		window.location.href="/checkout";
+    	}
     }
 </script>
 @stop

@@ -105,7 +105,7 @@
                                 }
                                 else{
                                     echo "<li><a href=\"/login\"><i class=\"fa fa-lock\"></i> Login</a></li>";
-                                    echo '<input id="user_id" type="hidden" value="0">';
+                                    echo '<input id="user_id" type="hidden" value="1">';
                                 }?>
                                 
                             </ul>
@@ -159,6 +159,27 @@
             </div>
         </div><!--/header-bottom-->
     </header><!--/header-->
+
+    <div id="errorModal" class="modal fade text-center" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Cannot add to Cart</h4>
+          </div>
+          <div class="modal-body">
+            <p id="error-message"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     @yield('content')
 
     <footer id="footer"><!--Footer-->
@@ -326,6 +347,7 @@
     <script type="text/javascript" src="{{asset('assets/users/js/jquery.prettyPhoto.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/users/js/main.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/users/js/jquery.validate.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('assets/users/js/notify.min.js')}}"></script>
 
     <script type="text/javascript">
     $("#search_box").keyup(function(event){

@@ -28,6 +28,6 @@ Route::get('logout', 'Auth\AuthController@logout');
 
 Route::post('/get_cart', 'ProductController@getCart');
 Route::post('/product_check', 'ProductController@productCheck');
-Route::post('/do_checkout', 'ProductController@doCheckOut');
+Route::get('/do_checkout', 'OrderController@doCheckOut');
 Route::post('/check_auth', 'Auth\AuthController@checkAuth');
 Route::post('/check_email', 'Auth\AuthController@checkEmail');

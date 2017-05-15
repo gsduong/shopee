@@ -26,6 +26,7 @@
 @stop
 
 @section('content')
+
 	<section>
 		<div class="container">
 			<div class="row">
@@ -66,7 +67,7 @@
                             <div class="brands-name">
                                 <ul class="nav nav-pills nav-stacked">
                                 @foreach($brands as $brand)
-                                    <li><a class="brand-option" href="{{url('/shop?c='.$catalog->id)}}"> <span class="pull-right"></span>{{$brand->name}}</a></li>
+                                    <li><a class="brand-option" href="{{url('/shop?b='.$catalog->id)}}"> <span class="pull-right"></span>{{$brand->name}}</a></li>
                                 @endforeach
                                 </ul>
                             </div>
@@ -156,7 +157,7 @@
 									<label for="{{'size-optiion-'.$size->size_id}}">{{$size->size}}</label>									
 								@endforeach
 								</p>
-								<p><b>Availability:</b> <span id="stock-status">In Stock</span></p>
+								<p><b>Availability:</b> <span id="stock-status">Loading ...</span></p>
 								<p><b>Condition:</b> New</p>
 								<p><b>Brand:</b> {{$results->brand_id}}</p>
 								<a href=""><img src="assets/users/images/product-details/share.png" class="share img-responsive"  alt="" /></a>
@@ -491,41 +492,52 @@
     function product_add() {
     	var color = $('input[type=radio][name=color]:checked').val();
   		var size = $('input[type=radio][name=size]:checked').val();
-	    if (localStorage['myCart'] == null) {
-	        var myCart = [];
-	        myCart.push({
-	            product_id: $('#product_id').val(),
-	            quantity: $('#quantity-box').val(),
-	            color: color,
-	            size: size
-	        });
-	        localStorage['myCart'] = JSON.stringify(myCart);
-	        console.log(localStorage['myCart']);
-	    }
-	    else {
-	        myCart = JSON.parse(localStorage['myCart']);
-	        var index = checkExist(myCart, $('#product_id').val());
-	        if (index > -1) {
-	            var qty = parseInt(myCart[index].quantity);
-	            qty += parseInt($('#quantity-box').val());
-	            myCart[index].quantity = qty;
-	        }
-	        else {
-	            myCart.push({
-	                product_id: $('#product_id').val(),
-	                quantity: $('#quantity-box').val(),
-	            	color: color,
-	            	size: size
-	            });
-	        }
-	        localStorage['myCart'] = JSON.stringify(myCart);
-	        console.log(localStorage['myCart']);
-	    }
+  		if(color==0 || size==0){
+  			$("#error-message").html("You must choose Color and Size");
+  			$("#errorModal").modal('show');
+  		}
+  		else if($('#stock-status').text()=="Loading ..." || $('#stock-status').text()=="Out of Stock"){
+  			$("#error-message").html("This Product is Out of Stock");
+  			$("#errorModal").modal('show');
+  		}
+  		else{
+		    if (localStorage['myCart'] == null) {
+		        var myCart = [];
+		        myCart.push({
+		            product_id: $('#product_id').val(),
+		            quantity: $('#quantity-box').val(),
+		            color: color,
+		            size: size
+		        });
+		        localStorage['myCart'] = JSON.stringify(myCart);
+		        console.log(localStorage['myCart']);
+		    }
+		    else {
+		        myCart = JSON.parse(localStorage['myCart']);
+		        var index = checkExist(myCart, $('#product_id').val(), color, size);
+		        if (index > -1) {
+		            var qty = parseInt(myCart[index].quantity);
+		            qty += parseInt($('#quantity-box').val());
+		            myCart[index].quantity = qty;
+		        }
+		        else {
+		            myCart.push({
+		                product_id: $('#product_id').val(),
+		                quantity: $('#quantity-box').val(),
+		            	color: color,
+		            	size: size
+		            });
+		        }
+		        localStorage['myCart'] = JSON.stringify(myCart);
+		        console.log(localStorage['myCart']);
+		    }
+		    $.notify($('#quantity-box').val() + "product(s) is added to your cart", "success");
+  		}
 	}
-	function checkExist(vendors, value) {
+	function checkExist(vendors, value, color, size) {
 	    var found = -1;
 	    for (var i = 0; i < vendors.length; i++) {
-	        if (vendors[i].product_id == value) {
+	        if (vendors[i].product_id == value && vendors[i].color == color && vendors[i].size == size) {
 	            found = i;
 	            break;
 	        }
