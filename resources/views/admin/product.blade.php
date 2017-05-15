@@ -34,9 +34,57 @@
                 @endif
             </div>
             <div class="row">
-                <div class="col-xs-5">
-                    {{ $products->links() }}
+                {{--<div class="col-md-5">--}}
+                    {{--<div class="row">--}}
+                        {{--<form method="GET" action="" accept-charset="UTF-8" id="products-form">--}}
+                            {{--<div class="col-md-2 col-xs-3">--}}
+                                {{--{!! Form::select('category_id', $categories, Input::get('category'), ['id' => 'category', 'class' => 'form-control', 'onchange' => 'this.form.submit()']) !!}--}}
+                            {{--</div>--}}
+                            {{--<div class="col-md-3 col-xs-4">--}}
+                                {{--<div class="input-group custom-search-form">--}}
+                                    {{--<input type="text" class="form-control" name="search" value="{{ Input::get('search') }}" placeholder="">--}}
+                                    {{--<span class="input-group-btn">--}}
+                                        {{--<button class="btn btn-default" type="submit" id="search-users-btn">--}}
+                                        {{--<span class="glyphicon glyphicon-search"></span>--}}
+                                        {{--</button>--}}
+                                        {{--@if (Input::has('search') && Input::get('search') != '')--}}
+                                            {{--<a href="{{ url('/admin/product.html') }}" class="btn btn-danger" type="button" >--}}
+                                                {{--<span class="glyphicon glyphicon-remove"></span>--}}
+                                            {{--</a>--}}
+                                        {{--@endif--}}
+                                    {{--</span>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</form>--}}
+                    {{--</div>--}}
+
+                {{--</div>--}}
+            </div>
+            <div class="row tab-search">
+                <div class="col-md-6 col-xs-5">
+                    {{--{{ $products->links() }}--}}
+                    {{ $products->appends(Input::all()) }}
                 </div>
+                <form method="GET" action="" accept-charset="UTF-8" id="products-form">
+                    <div class="col-md-3 col-xs-3">
+                        {!! Form::select('category_id', $categories, Input::get('category_id'), ['id' => 'category', 'class' => 'form-control', 'onchange' => 'this.form.submit()']) !!}
+                    </div>
+                    <div class="col-md-3 col-xs-4">
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" name="search" value="{{ Input::get('search') }}" placeholder="Search by product name or SKU">
+                            <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit" id="search-users-btn">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                @if (Input::has('search') && Input::get('search') != '')
+                                    <a href="{{ url('/admin/dashboard/product.html') }}" class="btn btn-danger" type="button" >
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
+                                @endif
+                                    </span>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="row">
                 <div class="col-xs-12">

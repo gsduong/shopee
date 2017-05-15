@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Input;
 
 class ProductController extends Controller
 {
@@ -20,10 +21,45 @@ class ProductController extends Controller
     ];
 
     public function index(){
+        $categories = \App\Catalog::all()->pluck('name', 'id')->all();
+        array_unshift($categories, 'All');
+//        dd($categories);
+        $deleted_products = \App\Product::onlyTrashed()->orderBy('deleted_at', 'asc')->get();
+
         $products = \App\Product::orderBy('name', 'asc')->paginate(20);
 
-        $deleted_products = \App\Product::onlyTrashed()->orderBy('deleted_at', 'asc')->get();
-        return view('admin.product', ['products' => $products, 'deleted_products' => $deleted_products]);
+        if (Input::has('category_id') && Input::get('category_id') == 0) {
+            // Look for all category
+            if (Input::has('search') && Input::get('search') != '') {
+                $keyword = preg_replace('/\s\s+/', ' ', trim(Input::get('search')));
+                $products = \App\Product::where('name', 'like', '%'. $keyword . '%')->orWhere('sku', 'like', '%' . $keyword . '%')->orderBy('name', 'asc')->paginate(20);
+            } else {
+                // no search by key, but search by all category
+                $products = \App\Product::orderBy('name', 'asc')->paginate(20);
+            }
+        } elseif (Input::has('category_id') && Input::get('category_id') != 0) {
+            $id = Input::get('category_id');
+            $category_id_aray = array();
+            array_push($category_id_aray, $id);
+            $category = \App\Catalog::findOrFail($id);
+
+            if ($category->children) {
+                // get child category
+                foreach ($category->children as $children) {
+                    array_push($category_id_aray, $children->id);
+                }
+            }
+
+            if (Input::has('search') && Input::get('search') != '') {
+                $keyword = preg_replace('/\s\s+/', ' ', trim(Input::get('search')));
+                $products = \App\Product::whereIn('catalog_id', $category_id_aray)->where('name', 'like', '%'. $keyword . '%')->orWhere('sku', 'like', '%' . $keyword . '%')->orderBy('name', 'asc')->paginate(20);
+            } else {
+                // no search by key, but search by all category
+                $products = \App\Product::whereIn('catalog_id', $category_id_aray)->orderBy('name', 'asc')->paginate(20);
+            }
+        }
+
+        return view('admin.product', ['products' => $products, 'deleted_products' => $deleted_products, 'categories' => $categories]);
     }
 
     public function showFormCreate(){
@@ -177,5 +213,8 @@ class ProductController extends Controller
             $product->restore();
         }
         return redirect()->back()->with('success', 'Successfully restored!');
+    }
+
+    public function search(){
     }
 }
