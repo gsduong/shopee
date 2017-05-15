@@ -51,7 +51,7 @@
                                         <ul>
                                         @foreach($catalogs as $child)
                                             @if($child->parent_id==$catalog->id)
-                                                <li><a class="catalog-option" href="{{url('/shop?c='.$catalog->id)}}">{{$child->name}} </a></li>
+                                                <li><a class="catalog-option" href="{{url('/shop?c='.$child->id)}}">{{$child->name}} </a></li>
                                             @endif
                                         @endforeach
                                         </ul>
@@ -67,7 +67,7 @@
                             <div class="brands-name">
                                 <ul class="nav nav-pills nav-stacked">
                                 @foreach($brands as $brand)
-                                    <li><a class="brand-option" href="{{url('/shop?b='.$catalog->id)}}"> <span class="pull-right"></span>{{$brand->name}}</a></li>
+                                    <li><a class="brand-option" href="{{url('/shop?b='.$brand->id)}}"> <span class="pull-right"></span>{{$brand->name}}</a></li>
                                 @endforeach
                                 </ul>
                             </div>
@@ -95,9 +95,10 @@
 								<img src="{{$results->image_link}}" alt="" />
 								<h3>ZOOM</h3>
 							</div>
+
 							<div id="similar-product" class="carousel slide" data-ride="carousel">
 								
-								  <!-- Wrapper for slides -->
+								  
 								    <div class="carousel-inner">
 										<div class="item active">
 										  <a href=""><img src="assets/users/images/product-details/similar1.jpg" alt=""></a>
@@ -115,9 +116,8 @@
 										  <a href=""><img src="assets/users/images/product-details/similar3.jpg" alt=""></a>
 										</div>
 										
-									</div>
+									</div> 
 
-								  <!-- Controls -->
 								  <a class="left item-control" href="#similar-product" data-slide="prev">
 									<i class="fa fa-angle-left"></i>
 								  </a>
@@ -135,7 +135,7 @@
 								<input type="hidden" id="product_id" value="{{$results->id}}">
 								<img src="assets/users/images/product-details/rating.png" alt="" />
 								<span>
-									<span id="product_price">{{$results->regular_price}}</span>
+									<span id="product_price">{{$results->sale_price}}</span>
 									<label>Quantity:</label>
 									<input id="quantity-box" type="text" value="1" />
 									<button type="button" class="btn btn-fefault cart" onclick="product_add()">
@@ -354,8 +354,8 @@
 							
 						</div>
 					</div><!--/category-tab-->
-					
-					<div class="recommended_items"><!--recommended_items-->
+					<!--
+					<div class="recommended_items">
 						<h2 class="title text-center">recommended items</h2>
 						
 						<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
@@ -444,7 +444,7 @@
 								<i class="fa fa-angle-right"></i>
 							  </a>			
 						</div>
-					</div><!--/recommended_items-->
+					</div>-->
 					
 				</div>
 			</div>
@@ -507,8 +507,9 @@
 		            product_id: $('#product_id').val(),
 		            quantity: $('#quantity-box').val(),
 		            color: color,
-		            size: size
-		        });
+		            size: size,
+		            price: $('#product_price').text(),
+		        }); 
 		        localStorage['myCart'] = JSON.stringify(myCart);
 		        console.log(localStorage['myCart']);
 		    }
@@ -525,7 +526,8 @@
 		                product_id: $('#product_id').val(),
 		                quantity: $('#quantity-box').val(),
 		            	color: color,
-		            	size: size
+		            	size: size,
+		            	price: $('#product_price').text(),
 		            });
 		        }
 		        localStorage['myCart'] = JSON.stringify(myCart);

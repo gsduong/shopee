@@ -15,20 +15,17 @@
 			</div><!--/breadcrums-->
 
 			<div class="step-one">
-				<h2 class="heading">Step1</h2>
+				<h2 class="heading">Checkout</h2>
 			</div>
 			<div class="checkout-options">
 				<h3>New User</h3>
 				<p>Checkout options</p>
 				<ul class="nav">
 					<li>
-						<label><input type="checkbox"> Register Account</label>
+						<label><input type="radio" name="ck_type"> Register Account</label>
 					</li>
 					<li>
-						<label><input type="checkbox"> Guest Checkout</label>
-					</li>
-					<li>
-						<a href=""><i class="fa fa-times"></i>Cancel</a>
+						<label><input type="radio" name="ck_type"> Guest Checkout</label>
 					</li>
 				</ul>
 			</div><!--/checkout-options-->
@@ -39,33 +36,22 @@
 
 			<div class="shopper-informations">
 				<div class="row">
-					<div class="col-sm-3">
-						<div class="shopper-info">
-							<p>Shopper Information</p>
-							<form>
-								<input type="text" placeholder="Display Name">
-								<input type="text" placeholder="User Name">
-								<input type="password" placeholder="Password">
-								<input type="password" placeholder="Confirm password">
-							</form>
-							<a class="btn btn-primary" href="">Get Quotes</a>
-							<a class="btn btn-primary" href="javascript:void(0);" onclick="doCheckOut()">Continue</a>
-						</div>
-					</div>
 					<div class="col-sm-5 clearfix">
 						<div class="bill-to">
 							<p>Bill To</p>
 							<div class="form-one">
-								<form>
+								<form id="form-checkout">
 									<input id="buyer_name" type="text" placeholder="Fullname*" required>
-									<input id="buyer_mail" type="text" placeholder="Email*" required>
-									<input type="text" placeholder="Title">
-									<input id="buyer_address" type="text" placeholder="Address 1 *" required>
+									<input id="buyer_mail" name="buyer_mail" type="email" placeholder="Email*" required>
+									<input id="buyer_address" name="buyer_address" type="text" placeholder="Address 1 *" required>
 									<input type="text" placeholder="Address 2">
+									<a class="btn btn-primary" href="">Get Quotes</a>
+									<a class="btn btn-primary" href="javascript:void(0);" onclick="doCheckOut()">Continue</a>
 								</form>
 							</div>
 							<div class="form-two">
-								<form>
+								<form id="form-checkout-2">
+									<input type="text" placeholder="Title">
 									<input type="text" placeholder="Zip / Postal Code *">
 									<select>
 										<option>-- Country --</option>
@@ -89,10 +75,7 @@
 										<option>Canada</option>
 										<option>Dubai</option>
 									</select>
-									<input type="password" placeholder="Confirm password">
-									<input id="buyer_phone" type="text" placeholder="Phone *" required>
-									<input type="text" placeholder="Mobile Phone">
-									<input type="text" placeholder="Fax">
+									<input id="buyer_phone" type="text" placeholder="Mobile Phone *" required>
 								</form>
 							</div>
 						</div>
@@ -167,7 +150,30 @@
 @section('scripts')
 <script type="text/javascript" src="{{asset('assets/users/js/jquery-ui.min.js')}}"></script>
 <script>
-    	$.ajaxSetup({
+	$("#form-checkout").validate({
+		rules:{
+			buyer_name:{
+				required:true,
+			},
+			buyer_mail:{
+				required:true,
+				email:true
+			},
+			buyer_address:{
+				required:true,
+			}
+		}
+	}); 
+
+	$("#form-checkout-2").validate({
+		rules:{
+			buyer_phone:{
+				required:true,
+			}
+		}
+	});
+
+	$.ajaxSetup({
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
@@ -175,7 +181,7 @@
 
     $( document ).ready(function() {
 	    if (localStorage['myCart'] == null) {
-	    	$("#cart_item").html("<p class=\"text-center\">Your cart is empty</p>")
+	    	$("#cart_item").html("<p class=\"text-center\" style=\"margin-top:30px;margin-left:30px;\">Your cart is empty</p>");
 	    }
 	    else{
 	    	var data = localStorage['myCart'];
@@ -202,7 +208,7 @@
 						ItemHtml += "								<p>Size: " + items[i]["size"]["size"] + ", Color: " + items[i]["color"]["color_name"] + "</p>";
 						ItemHtml += "							</td>";
 						ItemHtml += "							<td class=\"cart_price\">";
-						ItemHtml += "								<p>" + items[i]["product_id"]["regular_price"] + "</p>";
+						ItemHtml += "								<p>" + items[i]["product_id"]["sale_price"] + "</p>";
 						ItemHtml += "							</td>";
 						ItemHtml += "							<td class=\"cart_quantity\">";
 						ItemHtml += "								<div class=\"cart_quantity_button\">";
@@ -210,7 +216,7 @@
 						ItemHtml += "								</div>";
 						ItemHtml += "							</td>";
 						ItemHtml += "							<td class=\"cart_total\">";
-						ItemHtml += "								<p class=\"cart_total_price\">" + items[i]["product_id"]["regular_price"]*items[i]["quantity"] + "</p>";
+						ItemHtml += "								<p class=\"cart_total_price\">" + items[i]["product_id"]["sale_price"]*items[i]["quantity"] + "</p>";
 						ItemHtml += "							</td>";
 						ItemHtml += "							<td class=\"cart_delete\">";
 						ItemHtml += "							</td>";
@@ -234,41 +240,56 @@
 	}
 
     function doCheckOut(){
-    		var products = localStorage['myCart'];
-    		$.ajax({
-            url: '{{url("/do_checkout")}}',
-	            type: "GET",
-	            dataType: "json",
-	            data: {
-	            	products:function (){
-	            		return products;
-	            	},
-	            	user_id:function(){
-	            		return $("#user_id").val()
-	            	},
-	            	name:function(){
-	            		return $("#buyer_name").val()
-	            	},
-	            	mail:function(){
-	            		return $("#buyer_mail").val()
-	            	},
-	            	phone:function(){
-	            		return $("#buyer_phone").val()
-	            	},
-	            	address:function(){
-	            		return $("#buyer_address").val()
-	            	},
-	            	message:function(){
-	            		return $("#buyer_message").val()
-	            	},
-	            	amount:function(){
-	            		return $("#buyer_amount").html()
-	            	},
-	            },
-	            success: function(items) {
-	            	console.log(items);
-	            }
-	        });
+    		$("#form-checkout").valid();
+    		$("#form-checkout-2").valid();
+    		if($("#form-checkout").valid() && $("#form-checkout-2").valid()){
+	    		var products = localStorage['myCart'];
+	    		$.ajax({
+	            url: '{{url("/do_checkout")}}',
+		            type: "POST",
+		            dataType: "json",
+		            data: {
+		            	products:function (){
+		            		return products;
+		            	},
+		            	user_id:function(){
+		            		return $("#user_id").val()
+		            	},
+		            	name:function(){
+		            		return $("#buyer_name").val()
+		            	},
+		            	mail:function(){
+		            		return $("#buyer_mail").val()
+		            	},
+		            	phone:function(){
+		            		return $("#buyer_phone").val()
+		            	},
+		            	address:function(){
+		            		return $("#buyer_address").val()
+		            	},
+		            	message:function(){
+		            		return $("#buyer_message").val()
+		            	},
+		            	amount:function(){
+		            		return $("#buyer_amount").html()
+		            	},
+		            },
+		            success: function(items) {
+		            	if(items["result"]=="success"){
+		            		var info = [];
+					        info.push({
+					            name: $('#buyer_name').val(),
+					            mail: $('#buyer_mail').val(),
+					            phone: $('#buyer_phone').val(),
+					            address: $('#buyer_address').val(),
+					        }); 
+					        localStorage['userInfo'] = JSON.stringify(info);
+		            		window.location.href="/thank";
+		            	}
+		            }
+		        });
+
+    		}
     }
 </script>
 @stop

@@ -101,6 +101,8 @@ class ProductController extends Controller
 
 	public function homeDisplay()
 	{
+		$catalogs = Catalog::get();
+		$brands = Brand::get();
 		$products = Product::paginate(6);
 		$cate1s = Product::where('catalog_id', '=' , 1)->paginate(4);
 		$cate2s = Product::where('catalog_id', '=' , 2)->paginate(4);
@@ -108,7 +110,7 @@ class ProductController extends Controller
 		$cate4s = Product::where('catalog_id', '=' , 4)->paginate(4);
 		$cate5s = Product::where('catalog_id', '=' , 5)->paginate(4);
 
-		return view('users.index', compact('products', 'cate1s', 'cate2s', 'cate3s', 'cate4s', 'cate5s'));
+		return view('users.index', compact('products', 'cate1s', 'cate2s', 'cate3s', 'cate4s', 'cate5s', 'catalogs', 'brands'));
 	}
 
 	public function shopDisplay(Request $request)
@@ -199,11 +201,25 @@ class ProductController extends Controller
 		$data = json_decode($request->data);
 		foreach($data as $d){
 			$product = Product::find((int)$d->product_id);
+			$stock = Stock::where('product_id', '=', $d->product_id)->where('color_id', '=', $d->color)->where('color_id', '=', $d->color)->get();
+			$total = 0;
+			try
+			{
+				foreach($stock as $s)
+				{
+					$total = $total + $s->stock;
+				}
+			}
+			catch(Exception $e)
+			{
+				$total = 0;
+			}
+			$d->stock = $total;
 			$d->product_id = $product;
 			$color = Color::find($d->color);
 			$d->color=$color;
 			$size = Size::find($d->size);
-			$d->size=$size;
+			$d->size=$size;		
 		}
 		return $data;
 	}

@@ -5,6 +5,28 @@
 @stop
 
 @section('content')
+
+	<div id="deleteConfirmModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Delete Product</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>Are you sure you want to remove this product from yout cart?</p>
+	      </div>
+	      <div class="modal-footer">
+	      	<button id="confirm-button" type="button" class="btn btn-default">Yes</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+	      </div>
+	    </div>
+
+	  </div>
+	</div>
+
 	<section id="cart_items">
 		<div class="container">
 			<div class="breadcrumbs">
@@ -122,7 +144,7 @@
 
     $( document ).ready(function() {
 	    if (localStorage['myCart'] == null) {
-	    	$("#cart_item").html("<p class=\"text-center\">Your cart is empty</p>")
+	    	$("#cart_item").html("<p class=\"text-center\" style=\"margin-top:30px;margin-left:30px;\">Your cart is empty</p>");
 	    }
 	    else{
 	    	var data = localStorage['myCart'];
@@ -137,13 +159,14 @@
 	            	}
 	            },
 	            success: function(items) {
+	            	console.log(items);
 	            	if(items.length==0){
 	            		$("#cart_item").html("<br><p style=\"margin-left:20px;\" >Your Cart is Empty</p>");
 	            	}
 	            	else{
 		            	var ItemHtml="";
 				    	for(var i=0; i< items.length; i++){
-							ItemHtml += "						<tr>";
+							ItemHtml += "						<tr id=\"row_" + items[i]["product_id"]["id"] + "\">";
 							ItemHtml += "							<td class=\"cart_product\">";
 							ItemHtml += "								<a href=\"\"><img src=\"" + items[i]["product_id"]["image_link"] + "\" alt=\"\"></a>";
 							ItemHtml += "							</td>";
@@ -153,15 +176,15 @@
 							ItemHtml += "								<p>Size: " + items[i]["size"]["size"] + ", Color: " + items[i]["color"]["color_name"] + "</p>";
 							ItemHtml += "							</td>";
 							ItemHtml += "							<td class=\"cart_price\">";
-							ItemHtml += "								<p>" + items[i]["product_id"]["regular_price"] + "</p>";
+							ItemHtml += "								<p>" + items[i]["product_id"]["sale_price"] + "</p>";
 							ItemHtml += "							</td>";
 							ItemHtml += "							<td class=\"cart_quantity\">";
 							ItemHtml += "								<div class=\"cart_quantity_button\">";
-							ItemHtml += "									<input class=\"cart_quantity_input\" type=\"text\" data-size=\"" + items[i]["size"]["id"] + "\" data-color=\"" + items[i]["color"]["id"] + "\" data-id=\"" + items[i]["product_id"]["id"] + "\" name=\"quantity\" value=\"" + items[i]["quantity"] + "\" size=\"2\">";
+							ItemHtml += "									<input id=\"qty_input_" + i + "\" class=\"cart_quantity_input\" type=\"text\" data-stock=\"" + items[i]["stock"] + "\" data-size=\"" + items[i]["size"]["id"] + "\" data-color=\"" + items[i]["color"]["id"] + "\" data-id=\"" + items[i]["product_id"]["id"] + "\" name=\"quantity\" value=\"" + items[i]["quantity"] + "\" size=\"2\">";
 							ItemHtml += "								</div>";
 							ItemHtml += "							</td>";
 							ItemHtml += "							<td class=\"cart_total\">";
-							ItemHtml += "								<p class=\"cart_total_price\">" + items[i]["product_id"]["regular_price"]*items[i]["quantity"] + "</p>";
+							ItemHtml += "								<p class=\"cart_total_price\">" + items[i]["product_id"]["sale_price"]*items[i]["quantity"] + "</p>";
 							ItemHtml += "							</td>";
 							ItemHtml += "							<td class=\"cart_delete\">";
 							ItemHtml += "								<a class=\"cart_quantity_delete\" href=\"javascript:void(0);\" data-size=\"" + items[i]["size"]["id"] + "\" data-color=\"" + items[i]["color"]["id"] + "\" data-id=\"" + items[i]["product_id"]["id"] + "\" onclick=\"deleteProduct(this)\"><i class=\"fa fa-times\"></i></a>";
@@ -172,22 +195,26 @@
 				    	$("#cart_item").html(ItemHtml);
 				    	sumPrice();
 	            	}
-
-			    	$('.cart_quantity_input').spinner({ min: 1 });
+	            	for(var i=0; i< items.length; i++){
+	            		$('.cart_quantity_input').spinner({ min: 1, max: parseInt(items[i]["stock"]) });
+	            	}
 			    	$('.ui-spinner-up').click(function() {
 					   var qty = $(this).siblings('input').val();
 					   var price = $(this).parent().parent().parent().prev().text();
 					   var id = $(this).siblings('input').attr("data-id");
 					   var color = $(this).siblings('input').attr("data-color");
 					   var size = $(this).siblings('input').attr("data-size");
+					   var stock = parseInt($(this).siblings('input').attr("data-stock"));
 						myCart = JSON.parse(localStorage['myCart']);
 						var index = checkExist(myCart, id, color, size);
 		                var qty = parseInt(myCart[index].quantity);
-		                qty += 1;
-		                myCart[index].quantity = qty;
-		                localStorage['myCart'] = JSON.stringify(myCart);
-					   $(this).parent().parent().parent().next().first().html('<p class="cart_total_price">' + qty*price + '</p>');
-					   sumPrice();
+		                if(qty<stock){
+			                qty += 1;
+			                myCart[index].quantity = qty;
+			                localStorage['myCart'] = JSON.stringify(myCart);
+						   $(this).parent().parent().parent().next().first().html('<p class="cart_total_price">' + qty*price + '</p>');
+						   sumPrice();
+		                }
 					});
 					$('.ui-spinner-down').click(function() {
 					   var qty = $(this).siblings('input').val();
@@ -199,11 +226,13 @@
 						var index = checkExist(myCart, id, color, size);
 						console.log(size);
 		                var qty = parseInt(myCart[index].quantity);
-		                qty -= 1;
-		                myCart[index].quantity = qty;
-		                localStorage['myCart'] = JSON.stringify(myCart);
-					   $(this).parent().parent().parent().next().first().html('<p class="cart_total_price">' + qty*price + '</p>');
-					   sumPrice();
+		                if(qty>1){
+		                	qty -= 1;
+			                myCart[index].quantity = qty;
+			                localStorage['myCart'] = JSON.stringify(myCart);
+						   $(this).parent().parent().parent().next().first().html('<p class="cart_total_price">' + qty*price + '</p>');
+						   sumPrice();
+		                }
 					});
 	            }
 	        });
@@ -234,13 +263,19 @@
     	var id = $(e).attr("data-id");
     	var size = $(e).attr("data-size");
     	var color = $(e).attr("data-color");
+    	$("#confirm-button").attr("onclick", "confirmDelete(" + id + ", " + size + ", " + color + ")");
+    	$("#deleteConfirmModal").modal('show');
+    }
+
+    function confirmDelete(id, size, color){
+    	$("#deleteConfirmModal").modal('hide');
     	myCart = JSON.parse(localStorage['myCart']);
 		var index = checkExist(myCart, id, color, size);
 		myCart.splice(index, 1);
 		localStorage['myCart'] = JSON.stringify(myCart);
-		$(e).parent().parent().remove();
+		$("#row_" + id).remove();
 		sumPrice();
-		if($("#cart_item").html()=="") $("#cart_item").html("<br><p style=\"margin-left:20px;\" >Your Cart is Empty</p>");
+		if($("#cart_item").html()=="") $("#cart_item").html("<p class=\"text-center\" style=\"margin-top:30px;margin-left:30px;\">Your cart is empty</p>");
     }
 
     function gotoCheckOut(){
