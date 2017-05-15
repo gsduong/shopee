@@ -19,9 +19,8 @@ class OrderController extends Controller
     }
 
     public function showFormEdit($id){
-//        $order = \App\Order::findOrFail($id);
-//        return view('admin.edit-order', ['order' => $order]);
-        return view('admin.edit-order');
+        $order = \App\Order::findOrFail($id);
+        return view('admin.edit-order', ['order' => $order]);
     }
 
     public function update(Request $request){

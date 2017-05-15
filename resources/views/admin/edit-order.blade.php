@@ -47,9 +47,9 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td>A.Johnson</td>
-                                        <td>0975911179</td>
-                                        <td>email@gmail.com</td>
+                                        <td>{{$order->buyer_name}}</td>
+                                        <td>{{$order->buyer_phone}}</td>
+                                        <td>{{$order->buyer_email}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -81,8 +81,8 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td>A.Johnson</td>
-                                        <td>0975911179</td>
+                                        <td>{{$order->buyer_message}}</td>
+                                        <td>{{$order->buyer_address}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -121,17 +121,41 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>Shirt</td>
-                                        <td><span class="label label-info">SKU</span></td>
-                                        <td>Image</td>
-                                        <td><span class="label label-warning">XL</span></td>
-                                        <td>Blue</td>
-                                        <td>5</td>
-                                        <td><span class="label label-success">500</span></td>
-                                    </tr>
+                                    @foreach($order->order_product as $item)
+                                        <tr>
+                                            <td>{{$item->product->name}}</td>
+                                            <td><span class="label label-info">{{$item->product->sku}}</span></td>
+                                            <td><img src="{{url($item->product->image_link)}}" alt="{{$item->product->name}}" height="50" width="50"></td>
+                                            <td><span class="label label-warning">{{$item->size->size}}</span></td>
+                                            <td style="color: {{$item->color->hexa_code}};">{{$item->color->color_name}}</td>
+                                            <td>{{$item->qty}}</td>
+                                            <td><span class="label label-success">{{$item->total}}</span></td>
+                                        </tr>
+                                    @endforeach
+
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <form action="{{url('admin/order/update')}}" method="POST">
+                                        {{csrf_field()}}
+                                        <label for="status">
+                                            <select name="status" id="status">
+                                                @for($i = 0; $i < 3; $i++)
+                                                    @if($i == $order->status)
+                                                        <option value="{{$i}}" selected>{{\App\Order::statusTranslate($i)}}</option>
+                                                    @else
+                                                        <option value="{{$i}}">{{\App\Order::statusTranslate($i)}}</option>
+                                                    @endif
+                                                @endfor
+                                            </select>
+                                        </label>
+                                        <input type="hidden" name="id" value="{{$order->id}}">
+                                        <br>
+                                        <input type="submit" name="submit" value="Apply" class="btn btn-info">
+                                    </form>
+                                </div>
                             </div>
                             <!-- /.table-responsive -->
                         </div>
