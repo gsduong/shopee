@@ -132,7 +132,6 @@
 		</div>
 	</section><!--/#do_action-->
 @stop
-}
 @section('scripts')
 <script type="text/javascript" src="{{asset('assets/users/js/jquery-ui.min.js')}}"></script>
 <script>
