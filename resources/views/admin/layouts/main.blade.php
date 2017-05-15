@@ -105,13 +105,11 @@
 
                         <!-- Menu Footer-->
                             <li class="user-footer">
-                                <div class="pull-left">
-                                    <a href="{{ url('/admin/password') }}" class="btn btn-default btn-flat">Change
-                                        password</a>
-                                </div>
-                                <div class="pull-right">
-                                    <a href="{{ url('/admin/logout') }}" class="btn btn-default btn-flat">Log out</a>
-                                </div>
+                                {{--<div class="pull-left">--}}
+                                    {{--<a href="{{ url('/admin/password') }}" class="btn btn-default btn-flat">Change--}}
+                                        {{--password</a>--}}
+                                {{--</div>--}}
+                                <a href="{{ url('/admin/logout') }}" class="btn btn-default btn-flat">Log out</a>
                             </li>
                         </ul>
                     </li>
